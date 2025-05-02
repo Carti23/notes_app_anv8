@@ -1,0 +1,121 @@
+.note-card {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.note-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+
+.note-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.note-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.note-actions {
+  display: flex;
+  gap: 16px;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+
+.note-card:hover .note-actions {
+  opacity: 1;
+}
+
+.action-button {
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  color: #666;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.action-button:hover {
+  color: #333;
+  transform: scale(1.1);
+}
+
+.share-button:hover {
+  color: #4CAF50;
+}
+
+.edit-button:hover {
+  color: #2196F3;
+}
+
+.delete-button:hover {
+  color: #dc3545;
+}
+
+.note-content {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+.note-timestamp {
+  font-size: 14px;
+  color: #999;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.timestamp-icon {
+  width: 16px;
+  height: 16px;
+  opacity: 0.5;
+}
+
+.notes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+  padding: 24px;
+}
+
+.notes-header {
+  display: flex;
+  gap: 32px;
+  padding: 16px 24px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  margin-bottom: 24px;
+}
+
+.tab-button {
+  font-size: 18px;
+  color: #666;
+  background: none;
+  border: none;
+  padding: 8px 24px;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tab-button.active {
+  background: #4F46E5;
+  color: white;
+  font-weight: 500;
+} 

@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+
+  backend:
+    build: ./backend
+    volumes:
+      - ./backend:/service
+      - static_volume:/service/staticfiles
+      - media_volume:/service/mediafiles
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - redis
+    environment:
+      - DJANGO_DEBUG=True
+      - DJANGO_ALLOWED_HOSTS=localhost,127.0.0.1,0.0.0.0
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=notes_dev_database
+      - DB_USER=postgres
+      - DB_PASS=postgres
+      - REDIS_URL=redis://redis:6379/1
+      - CORS_ORIGIN_ALLOW_ALL=True
+      - CORS_ALLOWED_ORIGINS=http://localhost:3000,http://127.0.0.1:3000
+      - EMAIL_BACKEND=django.core.mail.backends.console.EmailBackend
+      - DEFAULT_FROM_EMAIL=noreply@localhost
+
+  frontend:
+    build: ./frontend/notes-app-frontend
+    volumes:
+      - ./frontend/notes-app-frontend:/app
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    environment:
+      - REACT_APP_API_URL=http://localhost:8000
+    restart: on-failure
+
+  db:
+    image: postgres:13
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=notes_dev_database
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    restart: always
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6380:6379"
+    volumes:
+      - redis_data:/data
+    restart: always
+
+volumes:
+  postgres_data:
+  redis_data:
+  static_volume:
+  media_volume:

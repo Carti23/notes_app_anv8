@@ -1,0 +1,170 @@
+/* src/components/auth/Login.css */
+@import '../../styles/variables.css';
+
+.login-component {
+  background-color: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: var(--card-shadow);
+  padding: 2.5rem;
+  width: 100%;
+  animation: fadeIn 0.5s ease-out;
+  position: relative;
+  overflow: hidden;
+}
+
+.login-component::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: var(--accent-gradient);
+}
+
+.login-component h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  color: var(--text-primary);
+}
+
+.login-component .form-error {
+  background-color: rgba(231, 76, 60, 0.1);
+  border-left: 4px solid var(--delete-color);
+  color: var(--delete-color);
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+.login-component .form-error::before {
+  font-family: 'Font Awesome 5 Free';
+  content: "\f071"; /* exclamation triangle */
+  font-weight: 900;
+  margin-right: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.login-component .form-group {
+  margin-bottom: 1.5rem;
+}
+
+.login-component .form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  font-size: 1rem;
+}
+
+.login-component .input-with-icon {
+  position: relative;
+}
+
+.login-component .input-with-icon i {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-secondary);
+  transition: color 0.3s var(--transition-func);
+}
+
+.login-component .input-with-icon input {
+  width: 100%;
+  padding: 0.9rem 1rem 0.9rem 2.7rem;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  background-color: var(--input-bg);
+  color: var(--text-primary);
+  transition: all 0.3s var(--transition-func);
+  font-size: 1rem;
+}
+
+.login-component .input-with-icon input:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
+}
+
+.login-component .input-with-icon input:focus + i {
+  color: var(--accent-color);
+}
+
+.login-component .forgot-password {
+  text-align: right;
+  margin-bottom: 1.5rem;
+}
+
+.login-component .forgot-password a {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: color 0.3s var(--transition-func);
+}
+
+.login-component .forgot-password a:hover {
+  color: var(--accent-color);
+  text-decoration: underline;
+}
+
+.login-component .form-buttons {
+  margin-bottom: 1.5rem;
+}
+
+.login-component .btn-login {
+  width: 100%;
+  padding: 0.9rem;
+  background: var(--accent-gradient);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s var(--transition-func);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: var(--btn-shadow);
+}
+
+.login-component .btn-login:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(67, 97, 238, 0.25);
+}
+
+.login-component .btn-login:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.login-component .auth-redirect {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+.login-component .auth-redirect a {
+  color: var(--accent-color);
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.3s var(--transition-func);
+}
+
+.login-component .auth-redirect a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+  .login-component {
+    padding: 2rem 1.5rem;
+  }
+}

@@ -1,0 +1,148 @@
+/* src/components/modal/ShareNote.css */
+@import '../../styles/variables.css';
+
+.share-note-form {
+  padding: 2rem;
+}
+
+.share-note-form h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 1.5rem;
+  text-align: center;
+  position: relative;
+}
+
+.share-note-form h3::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+  height: 3px;
+  background: var(--success-gradient);
+  border-radius: 3px;
+}
+
+.share-note-form .form-error {
+  background-color: rgba(231, 76, 60, 0.1);
+  border-left: 4px solid var(--delete-color);
+  color: var(--delete-color);
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+}
+
+.share-note-form .form-error::before {
+  font-family: 'Font Awesome 5 Free';
+  content: "\f071"; /* exclamation triangle */
+  font-weight: 900;
+  margin-right: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.share-note-form .form-success {
+  background-color: rgba(46, 204, 113, 0.1);
+  border-left: 4px solid var(--success-color);
+  color: var(--success-color);
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+}
+
+.share-note-form .form-success::before {
+  font-family: 'Font Awesome 5 Free';
+  content: "\f00c"; /* check mark */
+  font-weight: 900;
+  margin-right: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.share-note-form .form-group {
+  margin-bottom: 1.5rem;
+}
+
+.share-note-form .form-group label {
+  display: block;
+  margin-bottom: 0.75rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  font-size: 1rem;
+}
+
+.share-note-form .form-group input {
+  width: 100%;
+  padding: 0.9rem 1rem;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  background-color: var(--input-bg);
+  color: var(--text-primary);
+  transition: all 0.3s var(--transition-func);
+  font-size: 1rem;
+}
+
+.share-note-form .form-group input:focus {
+  outline: none;
+  border-color: var(--success-color);
+  box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.15);
+}
+
+.share-note-form .form-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.share-note-form .btn-cancel {
+  padding: 0.75rem 1.25rem;
+  border: 1px solid var(--border-color);
+  background-color: transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 1rem;
+  color: var(--text-secondary);
+  flex: 1;
+  transition: all 0.3s var(--transition-func);
+}
+
+.share-note-form .btn-cancel:hover {
+  background-color: var(--bg-secondary);
+  transform: translateY(-2px);
+}
+
+.share-note-form .btn-submit {
+  padding: 0.75rem 1.25rem;
+  border: none;
+  background: var(--success-gradient);
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 1rem;
+  color: white;
+  flex: 2;
+  transition: all 0.3s var(--transition-func);
+  box-shadow: 0 4px 6px rgba(46, 204, 113, 0.2);
+}
+
+.share-note-form .btn-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 10px rgba(46, 204, 113, 0.3);
+}
+
+.share-note-form .btn-submit:disabled,
+.share-note-form .btn-cancel:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}

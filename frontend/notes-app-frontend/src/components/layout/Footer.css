@@ -1,0 +1,31 @@
+/* src/components/layout/Footer.css */
+@import '../../styles/variables.css';
+
+.footer {
+  background-color: var(--navbar-bg);
+  padding: 1.5rem 0;
+  text-align: center;
+  margin-top: auto;
+  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);
+  position: relative;
+  overflow: hidden;
+}
+
+.footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--accent-color), transparent);
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  color: var(--text-secondary);
+  position: relative;
+  z-index: 1;
+}

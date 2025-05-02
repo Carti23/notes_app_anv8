@@ -1,0 +1,192 @@
+/* src/components/notes/NoteForm.css */
+@import '../../styles/variables.css';
+
+.note-form {
+  background-color: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: var(--card-shadow);
+  padding: 2rem;
+  transition: all 0.4s var(--transition-func);
+  border-left: 4px solid var(--accent-color);
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+
+.note-form::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 150px;
+  height: 150px;
+  background: var(--accent-gradient);
+  opacity: 0.05;
+  border-radius: 50%;
+  transform: translate(50%, -50%);
+  transition: all 0.5s var(--transition-func);
+}
+
+.note-form:hover::before {
+  transform: translate(40%, -40%) scale(1.2);
+  opacity: 0.08;
+}
+
+.note-form:hover {
+  box-shadow: var(--card-hover-shadow);
+  transform: translateY(-5px);
+}
+
+.note-form h2 {
+  margin-bottom: 1.75rem;
+  font-size: 1.75rem;
+  background: var(--accent-gradient);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-align: center;
+  position: relative;
+  font-weight: 600;
+}
+
+.note-form h2::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background: var(--accent-gradient);
+  border-radius: 3px;
+  transition: width 0.3s var(--transition-func);
+}
+
+.note-form:hover h2::after {
+  width: 100px;
+}
+
+.note-form .form-group {
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.note-form .form-group label {
+  display: block;
+  margin-bottom: 0.75rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  font-size: 1.1rem;
+  transition: all 0.3s var(--transition-func);
+  position: relative;
+  padding-left: 5px;
+}
+
+.note-form .form-group label::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 0;
+  background: var(--accent-gradient);
+  border-radius: 3px;
+  transition: height 0.3s var(--transition-func);
+}
+
+.note-form .form-group:hover label::before {
+  height: 80%;
+}
+
+.note-form .form-group input,
+.note-form .form-group textarea {
+  width: 100%;
+  padding: 0.9rem 1rem;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  background-color: var(--input-bg);
+  color: var(--text-primary);
+  font-family: inherit;
+  transition: all 0.3s var(--transition-func);
+  font-size: 1rem;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.note-form .form-group input:focus,
+.note-form .form-group textarea:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2), inset 0 2px 4px rgba(0, 0, 0, 0);
+  transform: translateY(-2px);
+}
+
+.note-form .form-group textarea {
+  min-height: 150px;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.note-form .form-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.note-form .btn-submit,
+.note-form .btn-cancel {
+  padding: 0.85rem 1.75rem;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.3s var(--transition-func);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.note-form .btn-submit {
+  background: var(--accent-gradient);
+  color: white;
+  flex: 2;
+  box-shadow: var(--btn-shadow);
+}
+
+.note-form .btn-submit:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(67, 97, 238, 0.3);
+}
+
+.note-form .btn-cancel {
+  background-color: transparent;
+  color: var(--text-secondary);
+  border: 2px solid var(--border-color);
+  flex: 1;
+}
+
+.note-form .btn-cancel:hover {
+  background-color: var(--delete-color);
+  color: white;
+  border-color: var(--delete-color);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(231, 76, 60, 0.25);
+}
+
+.note-form .form-error {
+  background-color: rgba(231, 76, 60, 0.1);
+  border-left: 4px solid var(--delete-color);
+  color: var(--delete-color);
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+}

@@ -1,0 +1,107 @@
+/* src/pages/Home/Home.css */
+@import '../../styles/variables.css';
+
+.hero {
+  background: var(--hero-bg);
+  padding: 5rem 1.5rem;
+  text-align: center;
+  color: var(--hero-text);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 8%, transparent 8%);
+  background-size: 25px 25px;
+  transform: rotate(45deg);
+  opacity: 0.5;
+  animation: moveBackground 60s linear infinite;
+}
+
+.hero-content {
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.hero h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  animation: slideInFromTop 1s ease-out;
+  position: relative;
+  display: inline-block;
+}
+
+.hero h1::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 4px;
+}
+
+.hero p {
+  font-size: 1.25rem;
+  opacity: 0.9;
+  animation: slideInFromBottom 1s ease-out;
+  margin-top: 1.5rem;
+}
+
+.App-main {
+  flex: 1;
+  padding: 2rem 1.5rem;
+  background-color: var(--bg-secondary);
+  position: relative;
+  transition: all 0.4s var(--transition-func);
+}
+
+.App-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  gap: 2rem;
+  flex-direction: column;
+}
+
+.notes-sidebar {
+  flex: 1;
+  min-width: 300px;
+}
+
+.notes-container {
+  flex: 2;
+}
+
+/* Responsive layout */
+@media (min-width: 768px) {
+  .App-container {
+    flex-direction: row;
+  }
+  
+  .notes-sidebar {
+    flex: 0 0 350px;
+  }
+}
+
+/* Hero animations */
+@keyframes moveBackground {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 500px 500px;
+  }
+}

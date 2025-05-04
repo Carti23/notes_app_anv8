@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/service
+      - static_volume:/service/staticfiles
+      - media_volume:/service/mediafiles
+    environment:
+      - DJANGO_DEBUG=True
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=notes_dev_database
+      - DB_USER=postgres
+      - DB_PASS=postgres
+      - REDIS_URL=redis://redis:6379/0
+      - CORS_ORIGIN_ALLOW_ALL=True
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py collectstatic --noinput &&
+             python manage.py runserver 0.0.0.0:8000"
+    depends_on:
+      - db
+      - redis
+
+  frontend:
+    build: ./frontend/notes-app-frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend/notes-app-frontend:/app
+      - /app/node_modules
+    environment:
+      - REACT_APP_API_URL=http://localhost:8000
+    depends_on:
+      - backend
+
+  db:
+    image: postgres:13
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=notes_dev_database
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6380:6379"
+    volumes:
+      - redis_data:/data
+
+volumes:
+  postgres_data:
+  redis_data:
+  static_volume:
+  media_volume: 

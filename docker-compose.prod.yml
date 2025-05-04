@@ -25,11 +25,14 @@ services:
     restart: always
 
   frontend:
-    build: ./frontend/notes-app-frontend
+    build: 
+      context: ./frontend/notes-app-frontend
+      args:
+        - REACT_APP_API_URL=http://${DJANGO_ALLOWED_HOSTS}:8000
     ports:
-      - "3000:3000"
+      - "3000:80"
     environment:
-      - REACT_APP_API_URL=http://${DJANGO_ALLOWED_HOSTS}:8000
+      - NODE_ENV=production
     depends_on:
       - backend
     restart: always

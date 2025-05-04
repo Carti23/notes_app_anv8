@@ -15,5 +15,12 @@ RUN npm run build
 FROM nginx:alpine
 COPY --from=build /app/build /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Create directory for static files
+RUN mkdir -p /usr/share/nginx/html/static
+
+# Copy static files
+COPY --from=build /app/build/static /usr/share/nginx/html/static
+
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]

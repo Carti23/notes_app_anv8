@@ -2,7 +2,6 @@
 Development settings for service project.
 """
 
-
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = "django-insecure-^n81=$zu^k-$!1q1wve$_k%)&hrkp8or^4z8ds$lmqnxy-z-q8"
 

@@ -1,0 +1,39 @@
+[flake8]
+max-line-length = 120
+exclude =
+    .git,
+    __pycache__,
+    build,
+    dist,
+    */migrations/*,
+    manage.py
+ignore =
+    # Star imports in settings
+    F403,F405,
+    # Line break before binary operator
+    W503,
+    # Line break after binary operator
+    W504,
+    # Line too long
+    E501,
+    # Module level import not at top of file
+    E402,
+    # Double quotes
+    Q000,
+    # Missing docstring
+    D100,D101,D102,D105,D106,D200,D205,D401,
+    # Import order
+    I100,I201
+per-file-ignores =
+    # Ignore unused imports in __init__.py files
+    **/__init__.py:F401
+    # Ignore unused imports in tests
+    **/tests.py:F401
+    **/test_*.py:F401
+    # Ignore unused imports in views and services
+    **/views.py:F401
+    **/services.py:F401,F811
+    # Ignore redefinition in throttling
+    **/throttling.py:F811
+    # Ignore import order in tests
+    **/test_*.py:I100,I201

@@ -7,14 +7,14 @@ import sys
 def main():
     """Run administrative tasks."""
     # Default to local settings
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'service.settings.local')
-    
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "service.settings.local")
+
     # Override with environment-specific settings if specified
-    if os.getenv('DJANGO_ENV') == 'production':
-        os.environ['DJANGO_SETTINGS_MODULE'] = 'service.settings.prod'
-    elif os.getenv('DJANGO_ENV') == 'development':
-        os.environ['DJANGO_SETTINGS_MODULE'] = 'service.settings.dev'
-    
+    if os.getenv("DJANGO_ENV") == "production":
+        os.environ["DJANGO_SETTINGS_MODULE"] = "service.settings.prod"
+    elif os.getenv("DJANGO_ENV") == "development":
+        os.environ["DJANGO_SETTINGS_MODULE"] = "service.settings.dev"
+
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
@@ -26,5 +26,5 @@ def main():
     execute_from_command_line(sys.argv)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

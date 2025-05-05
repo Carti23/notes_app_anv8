@@ -7,6 +7,27 @@ on:
     branches: [ main, dev ]
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8 black isort
+
+      - name: Run linting
+        run: |
+          flake8 .
+          black . --check
+          isort . --check-only
+
   test:
     runs-on: ubuntu-latest
     services:
@@ -23,7 +44,7 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-          
+
       redis:
         image: redis:6
         ports:
@@ -36,29 +57,29 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.9'
-          
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements/local.txt
-          
+
       - name: Run migrations
         env:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test_db
         run: python manage.py migrate
-        
+
       - name: Run tests
         env:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test_db
           REDIS_URL: redis://localhost:6379/0
         run: |
           pytest --cov=./ --cov-report=xml
-          
+
       - name: Upload coverage report
         uses: codecov/codecov-action@v3
         with:
@@ -66,23 +87,23 @@ jobs:
           fail_ci_if_error: true
 
   build:
-    needs: [test]
+    needs: [lint, test]
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev'
-    
+
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
-        
+
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v2
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-          
+
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
@@ -96,10 +117,10 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
-    
+
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Deploy to server
         uses: appleboy/ssh-action@master
         with:
@@ -110,4 +131,4 @@ jobs:
             cd ${{ secrets.DEPLOY_PATH }}
             git pull
             docker-compose pull
-            docker-compose up -d 
+            docker-compose up -d

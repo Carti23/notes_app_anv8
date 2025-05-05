@@ -11,12 +11,12 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'service.settings.local')
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "service.settings.local")
 
 # Override with environment-specific settings if specified
-if os.getenv('DJANGO_ENV') == 'production':
-    os.environ['DJANGO_SETTINGS_MODULE'] = 'service.settings.prod'
-elif os.getenv('DJANGO_ENV') == 'development':
-    os.environ['DJANGO_SETTINGS_MODULE'] = 'service.settings.dev'
+if os.getenv("DJANGO_ENV") == "production":
+    os.environ["DJANGO_SETTINGS_MODULE"] = "service.settings.prod"
+elif os.getenv("DJANGO_ENV") == "development":
+    os.environ["DJANGO_SETTINGS_MODULE"] = "service.settings.dev"
 
 application = get_wsgi_application()

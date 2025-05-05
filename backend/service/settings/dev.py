@@ -2,15 +2,14 @@
 Development settings for service project.
 """
 
-from .base import *
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-^n81=$zu^k-$!1q1wve$_k%)&hrkp8or^4z8ds$lmqnxy-z-q8'
+SECRET_KEY = "django-insecure-^n81=$zu^k-$!1q1wve$_k%)&hrkp8or^4z8ds$lmqnxy-z-q8"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['54.208.181.106', 'localhost']
+ALLOWED_HOSTS = ["54.208.181.106", "localhost"]
 
 # Database
 DATABASES = {
@@ -37,7 +36,7 @@ CACHES = {
             "SOCKET_CONNECT_TIMEOUT": 20,
             "SOCKET_TIMEOUT": 20,
             "COMPRESSOR_CLASS": "django_redis.compressors.zlib.ZlibCompressor",
-        }
+        },
     }
 }
 
@@ -49,8 +48,8 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 # Email settings
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-DEFAULT_FROM_EMAIL = 'noreply@example.com'
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+DEFAULT_FROM_EMAIL = "noreply@example.com"
 
 # Frontend URL for email confirmation
-FRONTEND_URL = 'http://localhost:3000' 
+FRONTEND_URL = "http://localhost:3000"

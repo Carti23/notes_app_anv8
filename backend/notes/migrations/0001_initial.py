@@ -7,7 +7,6 @@ import uuid
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -16,38 +15,93 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Note',
+            name="Note",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('title', models.CharField(max_length=255)),
-                ('content', models.TextField()),
-                ('is_archived', models.BooleanField(default=False)),
-                ('is_pinned', models.BooleanField(default=False)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('last_edited_by', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='last_edited_notes', to=settings.AUTH_USER_MODEL)),
-                ('owner', models.ForeignKey(help_text='User who created and owns this note', on_delete=django.db.models.deletion.CASCADE, related_name='owned_notes', to=settings.AUTH_USER_MODEL)),
-                ('shared_with', models.ManyToManyField(blank=True, help_text='Users who can view and edit this note', related_name='shared_notes', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                ("title", models.CharField(max_length=255)),
+                ("content", models.TextField()),
+                ("is_archived", models.BooleanField(default=False)),
+                ("is_pinned", models.BooleanField(default=False)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "last_edited_by",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="last_edited_notes",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "owner",
+                    models.ForeignKey(
+                        help_text="User who created and owns this note",
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="owned_notes",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "shared_with",
+                    models.ManyToManyField(
+                        blank=True,
+                        help_text="Users who can view and edit this note",
+                        related_name="shared_notes",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Note',
-                'verbose_name_plural': 'Notes',
-                'ordering': ['-updated_at'],
+                "verbose_name": "Note",
+                "verbose_name_plural": "Notes",
+                "ordering": ["-updated_at"],
             },
         ),
         migrations.CreateModel(
-            name='NoteHistory',
+            name="NoteHistory",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('content', models.TextField()),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('edited_by', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL)),
-                ('note', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='history', to='notes.note')),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                ("content", models.TextField()),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                (
+                    "edited_by",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "note",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="history",
+                        to="notes.note",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Note History',
-                'verbose_name_plural': 'Note Histories',
-                'ordering': ['-created_at'],
+                "verbose_name": "Note History",
+                "verbose_name_plural": "Note Histories",
+                "ordering": ["-created_at"],
             },
         ),
     ]

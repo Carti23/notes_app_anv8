@@ -1,6 +1,7 @@
 """
 Common test fixtures for the notes-app backend.
 """
+
 import pytest
 from django.contrib.auth import get_user_model
 from rest_framework.test import APIClient
@@ -26,7 +27,7 @@ def test_user():
         username="testuser",
         email="test@example.com",
         password="testpass123",
-        is_verified=True
+        is_verified=True,
     )
     return user
 
@@ -50,7 +51,7 @@ def test_user2():
         username="testuser2",
         email="test2@example.com",
         password="testpass123",
-        is_verified=True
+        is_verified=True,
     )
     return user
 
@@ -62,4 +63,4 @@ def authenticated_client2(api_client, test_user2):
     """
     refresh = RefreshToken.for_user(test_user2)
     api_client.credentials(HTTP_AUTHORIZATION=f"Bearer {refresh.access_token}")
-    return api_client 
+    return api_client

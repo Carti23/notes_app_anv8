@@ -5,12 +5,12 @@ Local development settings for service project.
 from .base import *
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-local-development-key-change-in-production'
+SECRET_KEY = "django-insecure-local-development-key-change-in-production"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 
 # Database
 DATABASES = {
@@ -36,13 +36,13 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 # Email settings
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-DEFAULT_FROM_EMAIL = 'noreply@localhost'
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+DEFAULT_FROM_EMAIL = "noreply@localhost"
 
 # Frontend URL for email confirmation
-FRONTEND_URL = 'http://localhost:3000'
+FRONTEND_URL = "http://localhost:3000"
 
 # Disable password hashers for faster development
 PASSWORD_HASHERS = [
-    'django.contrib.auth.hashers.MD5PasswordHasher',
-] 
+    "django.contrib.auth.hashers.MD5PasswordHasher",
+]

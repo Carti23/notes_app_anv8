@@ -1,42 +1,37 @@
 from django.contrib.auth import get_user_model
 from django.core.cache import cache
 from django.db import models
-from .models import Note, NoteHistory
+
 from .exceptions import NoteSharingError, UserNotFoundError
+from .models import Note, NoteHistory
 
 User = get_user_model()
+
 
 class NoteService:
     @staticmethod
     def get_user_notes(user):
         """Get all notes for a user (owned and shared)."""
-        cache_key = f'user_notes_{user.id}'
+        cache_key = f"user_notes_{user.id}"
         notes = cache.get(cache_key)
-        
+
         if notes is None:
             notes = Note.objects.filter(
                 models.Q(owner=user) | models.Q(shared_with=user)
             ).distinct()
             cache.set(cache_key, notes, timeout=300)  # Cache for 5 minutes
-            
+
         return notes
 
     @staticmethod
     def create_note(user, title, content):
         """Create a new note with history tracking."""
         note = Note.objects.create(
-            owner=user,
-            title=title,
-            content=content,
-            last_edited_by=user
+            owner=user, title=title, content=content, last_edited_by=user
         )
-        
-        NoteHistory.objects.create(
-            note=note,
-            content=content,
-            edited_by=user
-        )
-        
+
+        NoteHistory.objects.create(note=note, content=content, edited_by=user)
+
         return note
 
     @staticmethod
@@ -49,14 +44,10 @@ class NoteService:
         if user is not None:
             note.last_edited_by = user
         note.save()
-        
+
         if old_content != content:
-            NoteHistory.objects.create(
-                note=note,
-                content=content,
-                edited_by=user
-            )
-        
+            NoteHistory.objects.create(note=note, content=content, edited_by=user)
+
         return note
 
     @staticmethod
@@ -64,7 +55,7 @@ class NoteService:
         """Share a note with another user."""
         if note.owner != owner:
             raise NoteSharingError("Only the owner can share this note.")
-            
+
         try:
             user_to_share = User.objects.get(id=user_id)
             if note.share_with_user(user_to_share):
@@ -78,7 +69,7 @@ class NoteService:
         """Remove sharing access for a user."""
         if note.owner != owner:
             raise NoteSharingError("Only the owner can modify sharing settings.")
-            
+
         try:
             user_to_unshare = User.objects.get(id=user_id)
             if note.unshare_with_user(user_to_unshare):
@@ -100,4 +91,4 @@ class NoteService:
     @staticmethod
     def get_shared_notes(user):
         """Get notes shared with the user."""
-        return user.shared_notes.all() 
+        return user.shared_notes.all()

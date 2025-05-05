@@ -1,19 +1,22 @@
-from typing import Dict, Optional, Any
+import logging
+from typing import Any, Dict, Optional
+
+from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import default_token_generator
+from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
+from django.db import transaction
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from rest_framework_simplejwt.tokens import RefreshToken, TokenError
-from django.conf import settings
-from django.contrib.auth import get_user_model
-import logging
 
+from .exceptions import InvalidCredentialsError, UserNotFoundError
 from .models import User
-from .exceptions import UserNotFoundError, InvalidCredentialsError
 
-logger = logging.getLogger("custom_logger")
-
+logger = logging.getLogger(__name__)
 User = get_user_model()
+
 
 class UserService:
     @staticmethod
@@ -43,9 +46,7 @@ class UserService:
     @staticmethod
     def create_user(username: str, email: str, password: str) -> User:
         return User.objects.create_user(
-            username=username,
-            email=email,
-            password=password
+            username=username, email=email, password=password
         )
 
     @staticmethod
@@ -63,10 +64,10 @@ class UserService:
 def get_tokens_for_user(user: User) -> Dict[str, str]:
     """
     Generate JWT tokens for a user.
-    
+
     Args:
         user: User instance to generate tokens for
-        
+
     Returns:
         Dict containing access and refresh tokens
     """
@@ -77,7 +78,7 @@ def get_tokens_for_user(user: User) -> Dict[str, str]:
 
         # Log token generation with limited token info for security
         logger.info(f"Generated tokens for user: {user.email}")
-        
+
         return {
             "refresh": refresh_token,
             "access": access_token,
@@ -90,10 +91,10 @@ def get_tokens_for_user(user: User) -> Dict[str, str]:
 def send_confirmation_email(user: User) -> bool:
     """
     Send email confirmation link to user.
-    
+
     Args:
         user: User to send confirmation email to
-        
+
     Returns:
         Boolean indicating success or failure
     """
@@ -108,7 +109,7 @@ def send_confirmation_email(user: User) -> bool:
             f"Please confirm your email by clicking the link below:\n{confirmation_link}\n\n"
             "Thank you!"
         )
-        
+
         send_mail(
             subject,
             message,
@@ -116,10 +117,10 @@ def send_confirmation_email(user: User) -> bool:
             [user.email],
             fail_silently=False,
         )
-        
+
         logger.info(f"Confirmation email sent to {user.email}")
         return True
-        
+
     except Exception as e:
         logger.error(f"Failed to send confirmation email to {user.email}: {str(e)}")
         return False
@@ -128,10 +129,10 @@ def send_confirmation_email(user: User) -> bool:
 def blacklist_token(token: str) -> bool:
     """
     Blacklist a refresh token to invalidate it.
-    
+
     Args:
         token: JWT refresh token to blacklist
-        
+
     Returns:
         Boolean indicating success or failure
     """
@@ -151,16 +152,16 @@ def blacklist_token(token: str) -> bool:
 def verify_user_email(user: User) -> bool:
     """
     Mark a user's email as verified.
-    
+
     Args:
         user: User to verify
-        
+
     Returns:
         Boolean indicating success or failure
     """
     try:
         user.is_verified = True
-        user.save(update_fields=['is_verified'])
+        user.save(update_fields=["is_verified"])
         logger.info(f"Email verified for user {user.email}")
         return True
     except Exception as e:

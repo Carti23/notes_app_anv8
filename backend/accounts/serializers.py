@@ -72,9 +72,25 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         password2 = attrs.get("password2")
 
         if password != password2:
-            raise serializers.ValidationError({"password2": "Passwords do not match."})
+            raise serializers.ValidationError({"message": "Passwords do not match."})
 
         return attrs
+
+    def validate_email(self, value: str) -> str:
+        """Validate that the email is unique."""
+        if User.objects.filter(email=value).exists():
+            raise serializers.ValidationError(
+                {"message": "This email is already in use."}
+            )
+        return value
+
+    def validate_username(self, value: str) -> str:
+        """Validate that the username is unique."""
+        if User.objects.filter(username=value).exists():
+            raise serializers.ValidationError(
+                {"message": "This username is already in use."}
+            )
+        return value
 
     def create(self, validated_data: Dict[str, Any]) -> User:
         """Create a new user with hashed password."""

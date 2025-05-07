@@ -2,10 +2,11 @@
 Common test fixtures for the notes-app backend.
 """
 
-import pytest
 from django.contrib.auth import get_user_model
+import pytest
 from rest_framework.test import APIClient
 from rest_framework_simplejwt.tokens import RefreshToken
+
 
 User = get_user_model()
 

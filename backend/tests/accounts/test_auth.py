@@ -2,8 +2,8 @@
 Tests for authentication endpoints.
 """
 
-import pytest
 from django.urls import reverse
+import pytest
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -48,7 +48,7 @@ class TestAuthEndpoints:
 
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         # Check if the error message contains the email error
-        assert "email" in str(response.data["message"])
+        assert "email" in str(response.data["email"])
 
     def test_login_success(self, api_client, test_user):
         """

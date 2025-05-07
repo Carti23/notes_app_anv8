@@ -7,6 +7,14 @@ use_parentheses = true
 ensure_newline_before_comments = true
 line_length = 88
 skip = ["migrations"]
+sections = ["FUTURE", "STDLIB", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
+known_first_party = ["notes", "accounts", "service"]
+lines_after_imports = 2
+lines_between_sections = 1
+lines_between_types = 1
+combine_as_imports = true
+force_single_line = false
+force_sort_within_sections = true
 
 [tool.black]
 line-length = 88
@@ -16,4 +24,4 @@ extend-exclude = '''
 # A regex preceded with ^/ will apply only to files and directories
 # in the root of the project.
 ^/migrations/
-''' 
+'''

@@ -2,8 +2,8 @@
 Tests for note sharing functionality.
 """
 
-import pytest
 from django.urls import reverse
+import pytest
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 

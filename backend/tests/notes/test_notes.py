@@ -2,8 +2,8 @@
 Tests for note CRUD operations.
 """
 
-import pytest
 from django.urls import reverse
+import pytest
 from rest_framework import status
 
 from notes.models import Note

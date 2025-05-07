@@ -5,6 +5,9 @@ Test settings for the Django project.
 from .base import *  # noqa
 
 
+# Use a fixed secret key for testing
+SECRET_KEY = "django-insecure-test-key-for-testing-purposes-only"
+
 # Use SQLite for testing
 DATABASES = {
     "default": {

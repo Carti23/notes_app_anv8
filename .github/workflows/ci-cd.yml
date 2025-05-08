@@ -165,7 +165,7 @@ jobs:
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
           task-definition: ${{ steps.task-def-frontend.outputs.task-definition }}
-          service: notes-task-front-a8-service-vyjzjnn
+          service: notes-task-front-a8-service-vyizsjnn
           cluster: NoteCluster
           wait-for-service-stability: true
 

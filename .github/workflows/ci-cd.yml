@@ -103,6 +103,12 @@ jobs:
           echo "::set-output name=backend_image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
       # Build and push frontend image
+      # Copy frontend Dockerfile to correct location
+      - name: Copy frontend Dockerfile
+        run: |
+          cp frontend/notes-app-frontend/Dockerfile frontend/
+
+  # Build and push frontend image
       - name: Build and push frontend image to ECR
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}

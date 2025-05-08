@@ -1,5 +1,5 @@
 # Build stage
-FROM node:16-alpine as build
+FROM --platform=linux/amd64 node:16-alpine as build
 
 WORKDIR /app
 COPY package*.json ./
@@ -12,7 +12,7 @@ ENV REACT_APP_API_URL=${REACT_APP_API_URL}
 RUN npm run build
 
 # Production stage
-FROM nginx:alpine
+FROM --platform=linux/amd64 nginx:alpine
 COPY --from=build /app/build /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 

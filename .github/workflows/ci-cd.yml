@@ -1,5 +1,4 @@
-name: CI Pipeline
-
+name: CI/CD Pipeline
 on:
   push:
     branches: [ main, dev ]
@@ -11,17 +10,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.9'
-
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install flake8
-
       - name: Run linting
         run: |
           flake8 .
@@ -42,7 +38,6 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-
       redis:
         image: redis:6
         ports:
@@ -52,26 +47,21 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-
     steps:
       - uses: actions/checkout@v3
-
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.9'
-
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r backend/requirements.txt
-
       - name: Run migrations
         working-directory: backend
         env:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test_db
         run: python manage.py migrate
-
       - name: Run tests
         working-directory: backend
         env:
@@ -79,3 +69,109 @@ jobs:
           REDIS_URL: redis://localhost:6379/0
         run: |
           pytest
+
+  build-and-push:
+    needs: [lint, test]
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      # Build and push backend image
+      - name: Build and push backend image to ECR
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: notes/notes-app
+          IMAGE_TAG: backend-${{ github.sha }}
+        run: |
+          cd backend
+          docker build --platform linux/amd64 -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:backend
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:backend
+          echo "::set-output name=backend_image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+
+      # Build and push frontend image
+      - name: Build and push frontend image to ECR
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: notes/notes-app
+          IMAGE_TAG: frontend-${{ github.sha }}
+        run: |
+          cd frontend
+          docker build --platform linux/amd64 -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:frontend
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:frontend
+          echo "::set-output name=frontend_image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+
+  deploy-to-ecs:
+    needs: build-and-push
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      # Update backend task definition
+      - name: Fill in the new backend image ID in the Amazon ECS task definition
+        id: task-def-backend
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: .aws/backend-task-definition.json
+          container-name: notes-container-backend
+          image: ${{ steps.login-ecr.outputs.registry }}/notes/notes-app:backend-${{ github.sha }}
+
+      # Update frontend task definition
+      - name: Fill in the new frontend image ID in the Amazon ECS task definition
+        id: task-def-frontend
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: .aws/frontend-task-definition.json
+          container-name: notes-container-frontend
+          image: ${{ steps.login-ecr.outputs.registry }}/notes/notes-app:frontend-${{ github.sha }}
+
+      # Deploy backend to ECS
+      - name: Deploy backend to Amazon ECS
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.task-def-backend.outputs.task-definition }}
+          service: new-task-backend-service-hp0cfocj
+          cluster: NoteCluster
+          wait-for-service-stability: true
+
+      # Deploy frontend to ECS
+      - name: Deploy frontend to Amazon ECS
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.task-def-frontend.outputs.task-definition }}
+          service: notes-task-front-a8-service-vyjzjnn
+          cluster: NoteCluster
+          wait-for-service-stability: true
+
+      # Notify about successful deployment
+      - name: Notify success
+        if: success()
+        run: |
+          echo "Deployment to ECS successful! Application is now live."

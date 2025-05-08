@@ -102,20 +102,13 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:backend
           echo "::set-output name=backend_image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
-      # Build and push frontend image
-      # Copy frontend Dockerfile to correct location
-      - name: Copy frontend Dockerfile
-        run: |
-          cp frontend/notes-app-frontend/Dockerfile frontend/
-
-  # Build and push frontend image
       - name: Build and push frontend image to ECR
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: notes/notes-app
           IMAGE_TAG: frontend-${{ github.sha }}
         run: |
-          cd frontend
+          cd frontend/notes-app-frontend
           docker build --platform linux/amd64 -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:frontend
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
